@@ -1,4 +1,4 @@
-# easy_parking
+# easy_parkings
 
 A new Flutter project.
 
