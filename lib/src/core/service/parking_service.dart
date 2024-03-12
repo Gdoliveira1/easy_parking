@@ -21,9 +21,9 @@ class ParkingService {
     }
   }
 
-  late List<VacancyModel> _historys = [];
+  late List<VacancyModel> _histories = [];
 
-  List<VacancyModel> get vacancys => _listVacancies;
+  List<VacancyModel> get vacancies => _vacancies;
 
   final HistoryService _historyService = HistoryService.instance;
 
@@ -32,11 +32,14 @@ class ParkingService {
 
   Stream<List<VacancyModel>> get vacanciesStream => _vacanciesController.stream;
 
-  List<VacancyModel> get historys => _historys;
+  List<VacancyModel> get histories => _histories;
 
-  late List<VacancyModel> _listVacancies = [];
+  late final List<VacancyModel> _vacancies = List<VacancyModel>.generate(
+    10,
+    (index) => VacancyModel(number: index + 1),
+  );
 
-  void addVacancy(VacancyModel vacancy) async {
+  Future<void> addVacancy(VacancyModel vacancy) async {
     _updateVacancyDetails(vacancy);
     await _addToHistory(vacancy);
 
@@ -44,15 +47,15 @@ class ParkingService {
   }
 
   Future<void> handleExitVacancy(VacancyModel vacancy) async {
-    final int index =
-        _listVacancies.indexWhere((entry) => entry.id == vacancy.id);
+    final int index = _vacancies.indexWhere(
+        (entry) => entry.number == vacancy.number && entry.id == vacancy.id);
 
-    _listVacancies[index].status = VacancyStatusEnum.released;
-    _listVacancies[index].exitTime = DateTime.now();
-    print(vacancy.toJson());
+    _vacancies[index].status = VacancyStatusEnum.released;
+    _vacancies[index].exitTime = DateTime.now();
+
+    await _historyService.updateVacancy(vacancy);
 
     _addStatusToHistory(vacancy);
-    await _historyService.updateVacancy(vacancy);
 
     _updateParking();
   }
@@ -70,56 +73,46 @@ class ParkingService {
       status: vacancy.status,
     );
 
-    _historys.add(vacancyHistory);
-
+    _histories.add(vacancyHistory);
+    print("HISTORIES  ${_histories.map((e) => e.id)}");
     await _historyService.saveVacancy(vacancy);
   }
 
   void _addStatusToHistory(VacancyModel vacancy) {
-    final int index = _historys.indexWhere((entry) => entry.id == vacancy.id);
+    final int index = _histories.indexWhere((entry) => entry.id == vacancy.id);
 
-    _historys[index].status = VacancyStatusEnum.released;
-    _historys[index].exitTime = DateTime.now();
+    _histories[index].status = VacancyStatusEnum.released;
+    _histories[index].exitTime = DateTime.now();
   }
 
   void _updateVacancyDetails(VacancyModel vacancy) {
-    final int index = _listVacancies
-        .indexWhere((element) => element.number == vacancy.number);
+    final int index =
+        _vacancies.indexWhere((element) => element.number == vacancy.number);
 
-    _listVacancies[index].id = RandomHelper.identifier(size: 8);
-    _listVacancies[index].status = VacancyStatusEnum.busy;
-    _listVacancies[index].plate = vacancy.plate;
-    _listVacancies[index].number = vacancy.number;
-    _listVacancies[index].entryTime = DateTime.now();
+    _vacancies[index].id = RandomHelper.identifier(size: 8);
+    _vacancies[index].status = VacancyStatusEnum.busy;
+    _vacancies[index].plate = vacancy.plate;
+    _vacancies[index].number = vacancy.number;
+    _vacancies[index].entryTime = DateTime.now();
   }
 
   Future<void> _load() async {
-    // Carrega as vagas do histórico do banco de dados
-    List<VacancyModel> historyVacancies =
-        await _historyService.getAllVacancies();
+    _histories = await _historyService.getAllVacancies();
 
-    // Ordena as vagas do histórico por número, para garantir consistência
-    historyVacancies.sort((a, b) => a.number!.compareTo(b.number!));
+    for (final historyVacancy in _histories) {
+      final int index = _vacancies.indexWhere((vacancy) =>
+          vacancy.number == historyVacancy.number &&
+          vacancy.status != historyVacancy.status);
 
-    // Limita a quantidade de vagas do histórico para 10 ou menos
-    if (historyVacancies.length > 10) {
-      historyVacancies = historyVacancies.sublist(0, 10);
+      if (index != -1) {
+        _vacancies[index] = historyVacancy;
+      }
     }
 
-    // Preenche a lista de vagas com as informações do histórico
-    _listVacancies = List<VacancyModel>.generate(10, (index) {
-      if (index < historyVacancies.length) {
-        return historyVacancies[index];
-      } else {
-        return VacancyModel(number: index + 1);
-      }
-    });
-
-    // Atualiza o fluxo com a lista atualizada de vagas no estacionamento
     _updateParking();
   }
 
   void _updateParking() async {
-    _vacanciesController.sink.add(_listVacancies);
+    _vacanciesController.sink.add(_vacancies);
   }
 }

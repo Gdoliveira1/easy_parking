@@ -20,7 +20,7 @@ class ParkingCubit extends Cubit<ParkingState> {
   }
 
   void _loadParking() {
-    _vacancys = _parkingService.vacancys;
+    _vacancys = _parkingService.vacancies;
     _update();
     return;
   }
@@ -32,8 +32,8 @@ class ParkingCubit extends Cubit<ParkingState> {
     });
   }
 
-  void handleCreateVacancy(VacancyModel vacancy) {
-    _parkingService.addVacancy(vacancy);
+  Future<void> handleCreateVacancy(VacancyModel vacancy) async {
+    await _parkingService.addVacancy(vacancy);
 
     NotificationController.alert(
         response:
@@ -42,8 +42,8 @@ class ParkingCubit extends Cubit<ParkingState> {
     _update();
   }
 
-  void handleExitVacancy(VacancyModel vacancy) {
-    _parkingService.handleExitVacancy(vacancy);
+  Future<void> handleExitVacancy(VacancyModel vacancy) async {
+    await _parkingService.handleExitVacancy(vacancy);
 
     NotificationController.alert(
         response: ResponseStatusModel(message: "Saida Feita com Sucesso"));

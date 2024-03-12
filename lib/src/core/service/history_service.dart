@@ -20,7 +20,6 @@ class HistoryService {
       "number": vacancy.number,
       "plate": vacancy.plate,
       "entryTime": vacancy.entryTime!.millisecondsSinceEpoch,
-      "exitTime": vacancy.exitTime?.millisecondsSinceEpoch,
       "status": vacancy.status.title
     };
     await _repository.createVacancy(row);

@@ -1,5 +1,3 @@
-import "dart:async";
-
 import "package:easy_parking/src/core/service/parking_service.dart";
 import "package:easy_parking/src/modules/parking/bloc/parking_cubit.dart";
 import "package:easy_parking/src/modules/parking/bloc/parking_state.dart";
@@ -20,7 +18,7 @@ class HistoryParkingView extends StatefulWidget {
 }
 
 class _HistoryParkingViewState extends State<HistoryParkingView> {
-  late List<VacancyModel> historys = ParkingService.instance.historys;
+  late List<VacancyModel> historys = ParkingService.instance.histories;
   late int entries = 0;
   late int exits = 0;
 
@@ -132,7 +130,7 @@ class _HistoryParkingViewState extends State<HistoryParkingView> {
 
   void _filterHistoryByDate(DateTime selectedDate) {
     setState(() {
-      historys = ParkingService.instance.historys
+      historys = ParkingService.instance.histories
           .where((vacancy) =>
               vacancy.entryTime!.day == selectedDate.day &&
               vacancy.entryTime!.month == selectedDate.month &&
