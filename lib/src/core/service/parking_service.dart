@@ -25,7 +25,7 @@ class ParkingService {
 
   List<VacancyModel> get vacancies => _vacancies;
 
-  final HistoryService _historyService = HistoryService.instance;
+  final HistoryService _historyService = HistoryService();
 
   final StreamController<List<VacancyModel>> _vacanciesController =
       StreamController<List<VacancyModel>>.broadcast();
@@ -74,7 +74,7 @@ class ParkingService {
     );
 
     _histories.add(vacancyHistory);
-    print("HISTORIES  ${_histories.map((e) => e.id)}");
+
     await _historyService.saveVacancy(vacancy);
   }
 

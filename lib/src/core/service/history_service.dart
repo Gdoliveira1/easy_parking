@@ -40,10 +40,8 @@ class HistoryService {
           exitTime: row["exitTime"] != null
               ? DateTime.fromMillisecondsSinceEpoch(row["exitTime"])
               : null,
-          status: VacancyStatusEnum.values.firstWhere((item) =>
-              item.title ==
-              row["status"]) // Converter título de volta para enum
-          );
+          status: VacancyStatusEnum.values
+              .firstWhere((item) => item.title == row["status"]));
     }).toList();
   }
 }
