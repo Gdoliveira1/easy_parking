@@ -44,28 +44,6 @@ class AppWrapCubit extends Cubit<AppWrapState> {
     _reset(resetAlert: true);
   }
 
-  /// Displays a snackbar with the given response model.
-  ///
-  /// The [duration] parameter specifies the duration in seconds for which the snackbar should be displayed.
-  /// The [canClose] parameter indicates whether the snackbar can be closed by the user.
-  void snackBar(
-    ResponseStatusModel response, {
-    int duration = 8,
-    bool canClose = true,
-  }) {
-    // Emit the state with the snackbar response, duration, and close option
-    Future.delayed(const Duration(milliseconds: 100), () {
-      emit(state.copyWith(
-        snackBarResponse: response,
-        duration: duration,
-        canClose: canClose,
-      ));
-    });
-
-    // Reset the snackbar after a random delay
-    _reset(resetSnackBar: true);
-  }
-
   /// Resets the alert and snackbar after a random delay.
   void _reset({bool resetSnackBar = false, bool resetAlert = false}) {
     Future.delayed(Duration(milliseconds: 200 + _random.nextInt(500)), () {

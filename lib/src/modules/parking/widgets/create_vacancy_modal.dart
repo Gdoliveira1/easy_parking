@@ -40,8 +40,14 @@ class _CreateVacancyModalState extends State<CreateVacancyModal> {
                 controller: _plateController,
                 decoration: const InputDecoration(labelText: "Número da Placa"),
                 validator: (value) {
-                  if (value!.isEmpty) {
+                  if (value == null || value.isEmpty) {
                     return "Por favor, digite o número da placa";
+                  }
+                  if (value.length < 7) {
+                    return "Deve ter pelo menos 7 caracteres";
+                  }
+                  if (!RegExp(r"^[a-zA-Z]{3}\d{4}$").hasMatch(value)) {
+                    return "Placa deve seguir o padrão\n AAA1234";
                   }
                   return null;
                 },

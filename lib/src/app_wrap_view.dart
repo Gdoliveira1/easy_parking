@@ -37,10 +37,6 @@ class _AppWrapViewState extends State<AppWrapView> {
           value: appCubit,
           child: const CustomAppAlertModal(),
         ),
-        // BlocProvider.value(
-        //   value: appCubit,
-        //   child: const CustomAppSnackBarModal(),
-        // ),
       ],
     );
   }

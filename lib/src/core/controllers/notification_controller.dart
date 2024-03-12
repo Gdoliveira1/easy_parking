@@ -22,24 +22,4 @@ class NotificationController {
     // Trigger alert notification using the AppWrapCubit.
     _appWrapCubit.alert(data, duration: duration);
   }
-
-  // Display a snackbar notification.
-  static void snackBar({
-    ResponseStatusModel? response,
-    int duration = 8,
-    bool canClose = true,
-  }) {
-    assert(response != null); // Ensure response is not null.
-    late ResponseStatusModel data;
-
-    // If response is null, use an empty ResponseStatusModel.
-    data = response ?? ResponseStatusModel();
-
-    // Trigger snackbar notification using the AppWrapCubit.
-    _appWrapCubit.snackBar(
-      data,
-      duration: duration,
-      canClose: canClose,
-    );
-  }
 }
