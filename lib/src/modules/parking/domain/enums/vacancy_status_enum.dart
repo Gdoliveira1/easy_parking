@@ -8,6 +8,8 @@ enum VacancyStatusEnum {
   const VacancyStatusEnum(this.code, this.title);
 
   factory VacancyStatusEnum.fromCode(int byte) {
-    return VacancyStatusEnum.values.firstWhere((item) => item.code == byte);
+    return VacancyStatusEnum.values.firstWhere(
+      (item) => item.code == byte,
+    );
   }
 }

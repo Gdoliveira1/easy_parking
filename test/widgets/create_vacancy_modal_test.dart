@@ -21,7 +21,6 @@ void main() {
     expect(find.text("Salvar"), findsOneWidget);
     expect(find.text("Cancelar"), findsOneWidget);
   });
-
   testWidgets("CreateVacancyModal should validate plate input", (tester) async {
     final VacancyModel vacancy = VacancyModel(number: 1);
     await tester.pumpWidget(MaterialApp(
@@ -33,15 +32,16 @@ void main() {
       ),
     ));
 
-    final textFormField = find.byType(TextFormField);
-    await tester.enterText(textFormField, "");
+    await tester.tap(find.text("Salvar"));
     await tester.pump();
 
     expect(find.text("Por favor, digite o número da placa"), findsOneWidget);
 
-    await tester.enterText(textFormField, "ABC123");
+    await tester.enterText(find.byType(TextFormField), "ABC123");
+    await tester.tap(find.text("Salvar"));
     await tester.pump();
 
-    expect(find.text("Por favor, digite o número da placa"), findsNothing);
+    expect(find.text("O número da placa deve seguir o padrão AAA1234"),
+        findsNothing);
   });
 }

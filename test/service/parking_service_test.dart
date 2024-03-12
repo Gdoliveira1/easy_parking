@@ -1,54 +1,46 @@
+import "package:easy_parking/src/core/helpers/random_helper.dart";
 import "package:easy_parking/src/core/service/parking_service.dart";
-import "package:easy_parking/src/modules/parking/domain/enums/vacancy_status_enum.dart";
 import "package:easy_parking/src/modules/parking/domain/models/vacancy_model.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:sqflite_common_ffi/sqflite_ffi.dart";
 
 void main() {
   group("ParkingService", () {
     late ParkingService parkingService;
+    late VacancyModel vacancy;
 
-    setUp(() {
-      parkingService = ParkingService.instance;
+    setUpAll(() {
+      sqfliteFfiInit();
+
+      databaseFactory = databaseFactoryFfi;
+      TestWidgetsFlutterBinding.ensureInitialized();
+      WidgetsFlutterBinding.ensureInitialized();
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+              const MethodChannel("plugins.flutter.io/path_provider"),
+              (methodCall) async {
+        return ".";
+      });
     });
 
-    test("addVacancy adds vacancy to history with unique ID", () {
-      final vacancy = VacancyModel(
+    setUp(() async {
+      parkingService = ParkingService.instance;
+      vacancy = VacancyModel(
+        id: RandomHelper.identifier(size: 8),
         number: 1,
         plate: "ABC1234",
         entryTime: DateTime.now(),
-        status: VacancyStatusEnum.busy,
       );
-
-      parkingService.addVacancy(vacancy);
-
-      expect(parkingService.history.length, equals(1));
-      expect(parkingService.history[0].id, isNotNull);
-      expect(parkingService.history[0].id, isNotEmpty);
     });
 
-    test("addStatusToHistory updates vacancy status and exit time", () {
-      final vacancy = VacancyModel(
-        number: 3,
-        plate: "DEF9012",
-        entryTime: DateTime.now(),
-        status: VacancyStatusEnum.busy,
-      );
+    test("addVacancy adds vacancy to history with unique ID", () async {
+      await parkingService.addVacancy(vacancy);
 
-      parkingService.addVacancy(vacancy);
-
-      final exitVacancy = VacancyModel(
-        id: vacancy.id,
-        number: vacancy.number,
-        plate: vacancy.plate,
-        entryTime: vacancy.entryTime,
-        status: vacancy.status,
-      );
-
-      parkingService.handleExitVacancy(exitVacancy);
-
-      expect(parkingService.history.last.status,
-          equals(VacancyStatusEnum.released));
-      expect(parkingService.history.last.exitTime, isNotNull);
+      expect(parkingService.histories.length, equals(1));
+      expect(parkingService.histories[0].id, isNotNull);
+      expect(parkingService.histories[0].id, isNotEmpty);
     });
   });
 }

@@ -78,8 +78,8 @@ class _HomeParkingViewState extends State<HomeParkingView> {
     final bool occupied = vacancy.status.title.contains("Ocupado");
 
     return GestureDetector(
-      onTap: () => showDialogVacancy(vacancy, onCreateVacancy: (vacancy) {
-        context.read<ParkingCubit>().handleCreateVacancy(vacancy);
+      onTap: () => showDialogVacancy(vacancy, onCreateVacancy: (vacancy) async {
+        await context.read<ParkingCubit>().handleCreateVacancy(vacancy);
       }),
       child: Container(
         height: MediaQuery.of(context).size.height * 0.1,

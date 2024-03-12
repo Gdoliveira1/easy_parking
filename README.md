@@ -1,16 +1,49 @@
-# easy_parkings
+# Easy Parking
 
-A new Flutter project.
+Easy Parking é um aplicativo desenvolvido em Flutter para ajudar no controle de estacionamento. 
+Ele permite que os usuários gerenciem as vagas de estacionamento, registrem a entrada e saída de veículos e acompanhem o histórico de ocupação do estacionamento.
 
-## Getting Started
+## Funcionalidades
 
-This project is a starting point for a Flutter application.
+- Visualizar as vagas disponíveis no estacionamento.
+- Registrar a entrada de veículos em vagas específicas.
+- Registrar a saída de veículos das vagas.
+- Visualizar o histórico de ocupação do estacionamento.
 
-A few resources to get you started if this is your first Flutter project:
+## Tecnologias Utilizadas
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter: Framework de desenvolvimento de aplicativos multiplataforma
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Como Executar o Projeto
+
+1. Clone o repositório para o seu ambiente local:
+
+    ```bash
+    git clone https://github.com/Gdoliveira1/easy_parking.git
+    ```
+
+2. Acesse o diretório do projeto:
+
+    ```bash
+    cd easy_parking
+    ```
+
+3. Instale as dependências do Flutter:
+
+    ```bash
+    flutter pub get
+    ```
+
+5. Execute o aplicativo:
+
+    ```bash
+    flutter run
+    ```
+
+## Contribuindo
+
+Contribuições são sempre bem-vindas! Se você tiver sugestões de melhorias, correções de bugs ou novas funcionalidades, sinta-se à vontade para abrir uma issue ou enviar um pull request.
+
+## Autores
+
+- Gabriel
